@@ -21,11 +21,21 @@ def deal(number):
       cards.append(card)
     return cards
 
+def value_f(x):
+    value = 0
+    if x == "A":
+       value = 11
+    elif x == "K" or x == "Q" or x =="J":
+       value = 10
+    else:
+       value = x
+    return value
+
 
 
 shuffle()
 
 
 hand = deal(2)
-print(hand)
-print(hand[0][2])
+p_value = (value_f(hand[0][1])) + (value_f(hand[1][1]))
+print(p_value)
