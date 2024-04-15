@@ -6,6 +6,12 @@ import sys
 
 pygame.init()
 
+GREEN = (0,50,0)
+GRAY = (200, 200, 200)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+WHITE_HOVER = (250, 249, 246)
+
 #Set default values
 WIDTH,HEIGHT = 800,600
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -24,8 +30,6 @@ def draw_screen():
     draw_text("", text_font, (255, 255, 255), 270, 30)    
     draw_text("", text_font, (255, 255, 255), 600, 270)  
     pygame.display.update()
-
-GREEN = (0,50,0)
 
 FPS = 60
 
@@ -119,38 +123,51 @@ def value_f(x):
        value = x
     return value
 
-#Create a font object
-font = pygame.font.Font(None, 24)
+#Add new cards into a hand
+def hit(the_hand, value):
+    h_card = deck.pop()
+    the_hand.append(h_card)
+    print(the_hand)
+    value = value + value_f(the_hand[-1][1])
+    print(value)
+    return value
 
-#Create a surface for the button
-button_surface = pygame.Surface((150, 50))
+hand = deal(2)
+d_hand = deal(2)
+p_value = 0
+d_value = 0 
 
-# Render text on the button
-text = font.render("Hit", True, (0, 0, 0))
-text_rect = text.get_rect(center=(button_surface.get_width()/2, button_surface.get_height()/2))
+#Function to create buttons 
+def create_button(screen, color, x, y, width, height, text, text_color):
+    pygame.draw.rect(screen, color, (x, y, width, height))
 
-# Create a pygame.Rect object 
-button_rect = pygame.Rect(125, 125, 150, 50)
+    font = pygame.font.Font(None, 36)
+    text_surface = font.render(text, True, text_color)
+    text_rect = text_surface.get_rect(center=(x + width / 2, y + height / 2))
+    screen.blit(text_surface, text_rect)
+
+    mouse_pos = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+
+    if x + width > mouse_pos[0] > x and y + height > mouse_pos[1] > y:
+        pygame.draw.rect(screen, WHITE_HOVER, (x, y, width, height))    
+        screen.blit(text_surface, text_rect)
+
+        if click[0] == 1 and text == "Hit":
+            hit(hand, p_value)
+            SCREEN.blit(card_images[hand[-1][2]],(390, 340)) 
 
 
 
 def main():
-    hand = deal(2)
-    d_hand = deal(2)
     clock = pygame.time.Clock()
     run =True
-    p_value = 0
-    d_value = 0 
+    
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():    
             if event.type == pygame.QUIT:
                 run = False
-            # Check for the mouse button down event
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                # Call the on_mouse_button_down() function
-                if button_rect.collidepoint(event.pos):
-                    print("Button clicked!")  
 
         p_value = (value_f(hand[0][1])) + (value_f(hand[1][1]))
         d_value = (value_f(d_hand[0][1]))
@@ -160,25 +177,11 @@ def main():
         SCREEN.blit(DECK_IMAGE,(380, 70))  
         draw_text(str(p_value), text_font, (255, 255, 255), 490, 475)  
         draw_text(str(d_value), text_font, (255, 255, 255), 490, 190)  
+
+        create_button(SCREEN, WHITE, 450, 250, 100, 50, "Hit", BLACK)
+
         pygame.display.update() 
         
-        # Check if the mouse is over the button. This will create the button hover effect
-        if button_rect.collidepoint(pygame.mouse.get_pos()):
-            pygame.draw.rect(button_surface, (127, 255, 212), (1, 1, 148, 48))
-        else:
-            pygame.draw.rect(button_surface, (0, 0, 0), (0, 0, 150, 50))
-            pygame.draw.rect(button_surface, (255, 255, 255), (1, 1, 148, 48))
-            pygame.draw.rect(button_surface, (0, 0, 0), (1, 1, 148, 1), 2)
-            pygame.draw.rect(button_surface, (0, 100, 0), (1, 48, 148, 10), 2)
-
-        # Shwo the button text
-        button_surface.blit(text, text_rect)
-
-        # Draw the button on the screen
-        SCREEN.blit(button_surface, (button_rect.x, button_rect.y))
-    
-
-
 
     pygame.QUIT()
     sys.exit()

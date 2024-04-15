@@ -46,7 +46,7 @@ def hit(the_hand, value):
 
 def win(bank, bet):
     if t_value == 21 and d_value != 21:
-        bank = bank + bet * 2.5
+        bank = bank + bet * 1.5
         print("Player won with BJ!")
         print("You won", bet * 1.5)
     elif t_value > d_value and t_value < 22 or d_value > 21:
