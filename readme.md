@@ -33,6 +33,9 @@ Bonus
 
 
 Dokumentation
+
+Blackjack:
+
 Jag började allt med att lära mig mer om grunderna samt lite svårare delar av python med hjälp av olika youtube videor (https://www.youtube.com/watch?v=rfscVS0vtbw&t=1931s). Jag skrev kod medans jag följde med i videon och testade hur det olika funktionerna i python funkade med egna exempel, vilket gav mig lite bättre känsla för hur det skulle användas i ett Blackjack. 
 
 Målet med min första dag av att faktiskt skriva kod var att skapa en fungerande kortlek med 52 kort där varje värde hade 4 olika "suits" (färger). Jag började med att skapa 3 olika listor, en för själva kortleken och två för färgern och värde. Jag använde mig sedan av for looper för att skapa varje kort, för att sedan lägga till dom i min kortlek. Jag var inte helt säker på hur for loopen fungerade med listor så jag använde mig av denna video för att lära mig mer (https://www.youtube.com/watch?v=rmaaKvh94Vs).
@@ -49,4 +52,21 @@ Nu funkar egentligen allt och det är dags att utse vinnare. Detta genom en funk
 
 Alla funktioner i spelet finns nu och det är dags att skapa själva spelet. Det gjorde jag genom att använda det olika funktioner jag redan hade för att ge spelaren och datorn varsinn hand med ett värde. Endast datorn första kort är synligt och utifrån det så frågar spelet om du vill ta eller stå. Jag skapade sedan en variabel som får ett värde utifrån om du vill ta (h) eller stå (s). Om du väljer att ta så startas en while loop som håller på tills variabeln inte har värdet h (ta kort). Spelaren får chans att ta fler kort så länge värdet av handen är under 21, annars blir variabels värde s och programmet fortsätter och visar att spelaren förlorat. Om spelaren inte blivit tjock så visas datorns andra kort och ifall värdet är under 17 så kommer datorn ta nya kort tills den antingen har en giltig hand eller blivit tjock. Ifall både spelaren och datorn har en giltig hand så körs win funtionen och en vinnare utses. 
 
-Nu ville jag lägga till en valuta i spelet. 
+Nu ville jag lägga till en valuta i spelet. Det var inte överdrivet svårt, Jag löste det genom att skapa en variable som skall vara din bank. Man väljer valfri summa att starta med och spelet kommer att fortsätta spelas så länge du har mer än 0 på din bank. Innan varje runda så frågar spelet även dig hur mycket du vill betta och beroende på hur handen spelas ut så kommer du vinna eller förlora pengar. Det räknas ut genom att antingen värdet antingen dubblas eller försvinner. Värdet läggs sedan till på din bank och du får frågan om vad du vill satsa inför nästa runda.
+
+En hemsida som hjälp speciellt mycket under tiden har varit Stackoverflow.com vilket är en sida där man delar kod med andra där man kan få kommentarer om sin kod. Jag hittade många som gjort liknande projekt och stött på problem och kunde då lära mig från deras kod. Jag testade även vid vissa tillfällen att publicera min egna kod och frågade personer ifall dom såg problem i koden eller ifall jag skulle kunna skriva något på ett nytt enklare sätt. Vilket var väldigt lärorikt då några faktiskt skrev svar på min kod och jag kunde ställa frågor om saker jag inte riktigt förstått.
+Jag änvände även detta när jag gjorde ett tärningsspel där man spelare mot varann och jag hade problem med att lägga till stege kombinationen.
+
+Blackjack spelet funkar nu och alla mina mål är uppnådda med egna lösningar jag kommit på med hjälp av internet och dig :)
+
+
+
+Grafik:
+
+
+24-04-18
+Idag så löste jag problemet med att dra kort, för att göra det så skapade jag en variabel som skulle känna av när knappen tryckdes och när man släpper den. Programmet kommer alltså bara köra koden en gång fram på grund av att värder på mouse_down kommer ändras. 
+
+Jag löste även ett problemet att alla kort som dras placeras direkt på varann genom att ändra x kordinaten på korten med en variabel som ökar i värde efter varje gång man klickat på knappen. 
+
+Jag fick därefter att nytt problem med att det första två korten skrivs ut fler gånger vilket gör att det nya korten inte är lika synliga. Lösningen till detta är då att jag ska ha en for loop i main() som printar ut alla kort i handen samtidigt istället. Vilket får bli ett uppdrag till nästa lektion.

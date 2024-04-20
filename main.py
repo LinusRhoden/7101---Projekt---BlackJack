@@ -91,19 +91,7 @@ while bank > 0:
 
     print(hand_2)
     print(d_value)
-    while d_value < 17:
+    while d_value < 17 and t_value < 22:
         d_value = hit(hand_2, d_value)
 
     bank = win(bank, bet)
-
-
-    
-
-
-
-
-
-
-
-
-

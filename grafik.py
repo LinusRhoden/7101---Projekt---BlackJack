@@ -132,6 +132,8 @@ def hit(the_hand, value):
     print(value)
     return value
 
+mouse_down = False
+card_x = 0
 hand = deal(2)
 d_hand = deal(2)
 p_value = 0
@@ -139,6 +141,7 @@ d_value = 0
 
 #Function to create buttons 
 def create_button(screen, color, x, y, width, height, text, text_color):
+    global mouse_down, card_x
     pygame.draw.rect(screen, color, (x, y, width, height))
 
     font = pygame.font.Font(None, 36)
@@ -153,11 +156,17 @@ def create_button(screen, color, x, y, width, height, text, text_color):
         pygame.draw.rect(screen, WHITE_HOVER, (x, y, width, height))    
         screen.blit(text_surface, text_rect)
 
-        if click[0] == 1 and text == "Hit":
+        if click[0] == 1 and text == "Hit" and not mouse_down:
             hit(hand, p_value)
-            SCREEN.blit(card_images[hand[-1][2]],(390, 340)) 
+            SCREEN.blit(card_images[hand[-1][2]],(390 + card_x, 340))
+            card_x += 30
+            mouse_down = True
+            pygame.display.update()
 
+        if click[0] == 0:
+            mouse_down = False
 
+       
 
 def main():
     clock = pygame.time.Clock()
@@ -171,6 +180,7 @@ def main():
 
         p_value = (value_f(hand[0][1])) + (value_f(hand[1][1]))
         d_value = (value_f(d_hand[0][1]))
+        # skriv ut alla korten i handen, for slinga för handen
         SCREEN.blit(card_images[hand[0][2]],(330, 350)) 
         SCREEN.blit(card_images[hand[1][2]],(360, 340))  
         SCREEN.blit(card_images[d_hand[0][2]],(270, 70)) 
@@ -178,17 +188,14 @@ def main():
         draw_text(str(p_value), text_font, (255, 255, 255), 490, 475)  
         draw_text(str(d_value), text_font, (255, 255, 255), 490, 190)  
 
-        create_button(SCREEN, WHITE, 450, 250, 100, 50, "Hit", BLACK)
+        create_button(SCREEN, WHITE, 600, 200, 100, 50, "Hit", BLACK)
+        create_button(SCREEN, WHITE, 600, 300, 100, 50, "Stand", BLACK)
 
         pygame.display.update() 
         
 
     pygame.QUIT()
     sys.exit()
-
-
-
-
 
 draw_screen()
 
