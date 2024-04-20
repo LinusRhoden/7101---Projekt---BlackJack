@@ -1,12 +1,11 @@
 import pygame
 import random
 import time
-import os
 import sys
 
 pygame.init()
 
-GREEN = (0,50,0)
+GREEN = (0,50,0)  
 GRAY = (200, 200, 200)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -132,13 +131,16 @@ def hit(the_hand, value):
     print(value)
     return value
 
-hand = deal(2)
-d_hand = deal(2)
+mouse_down = False
+card_x = 0
 p_value = 0
 d_value = 0 
+hand = []
+d_hand = deal(2)
 
 #Function to create buttons 
 def create_button(screen, color, x, y, width, height, text, text_color):
+    global mouse_down, card_x, p_value, hand
     pygame.draw.rect(screen, color, (x, y, width, height))
 
     font = pygame.font.Font(None, 36)
@@ -153,18 +155,22 @@ def create_button(screen, color, x, y, width, height, text, text_color):
         pygame.draw.rect(screen, WHITE_HOVER, (x, y, width, height))    
         screen.blit(text_surface, text_rect)
 
-        if click[0] == 1 and text == "Hit":
-            global p_value  # Ensure we're using the global p_value variable
-            p_value = hit(hand, p_value)  # Update p_value after hitting
-            SCREEN.blit(card_images[hand[-1][2]],(390 + (len(hand) - 1) * 30, 340))  # Adjust x position for newly drawn card
+        if click[0] == 1 and text == "Hit" and not mouse_down:
+            hit(hand, p_value)
+            mouse_down = True
+            pygame.display.update()
 
-            # Display updated hand value
-            draw_text(str(p_value), text_font, (255, 255, 255), 490, 475)
+        if click[0] == 0:
+            mouse_down = False
+
+
 
 def main():
     clock = pygame.time.Clock()
     run =True
-    
+    global hand 
+    if not hand: # Deal the cards 
+        hand = deal(2)
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():    
@@ -173,18 +179,29 @@ def main():
 
         p_value = (value_f(hand[0][1])) + (value_f(hand[1][1]))
         d_value = (value_f(d_hand[0][1]))
-        SCREEN.blit(card_images[hand[0][2]],(330, 350)) 
-        SCREEN.blit(card_images[hand[1][2]],(360, 340))  
+
+        # Blit all cards using a for loop
+        player_card_x = 330
+        player_card_y = 350
+        for card in hand:
+            card_image = card_images[card[2]]
+            SCREEN.blit(card_image, (player_card_x, player_card_y))
+            player_card_x += 20
+            player_card_y -= 5
+        
+
         SCREEN.blit(card_images[d_hand[0][2]],(270, 70)) 
-        SCREEN.blit(DECK_IMAGE,(380, 70))  
+        SCREEN.blit(DECK_IMAGE,(380, 70)) 
+
         draw_text(str(p_value), text_font, (255, 255, 255), 490, 475)  
         draw_text(str(d_value), text_font, (255, 255, 255), 490, 190)  
 
         create_button(SCREEN, WHITE, 600, 200, 100, 50, "Hit", BLACK)
         create_button(SCREEN, WHITE, 600, 300, 100, 50, "Stand", BLACK)
+       
 
         pygame.display.update() 
-        
+      
 
     pygame.QUIT()
     sys.exit()
@@ -194,6 +211,3 @@ draw_screen()
 shuffle()
 
 main()
-
-
-

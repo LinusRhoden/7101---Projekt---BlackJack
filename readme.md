@@ -70,3 +70,6 @@ Idag så löste jag problemet med att dra kort, för att göra det så skapade j
 Jag löste även ett problemet att alla kort som dras placeras direkt på varann genom att ändra x kordinaten på korten med en variabel som ökar i värde efter varje gång man klickat på knappen. 
 
 Jag fick därefter att nytt problem med att det första två korten skrivs ut fler gånger vilket gör att det nya korten inte är lika synliga. Lösningen till detta är då att jag ska ha en for loop i main() som printar ut alla kort i handen samtidigt istället. Vilket får bli ett uppdrag till nästa lektion.
+
+24-04-20 (Hemma)
+Idag ville jag lösa problemet med for loopen och det gjorde jag genom att för varje kort i loopen så får variabeln card_image ett värde som senare används för att kalla efter bilden. Jag har även en x och y variabel för postionen för varje kort, dessa ändrar värde efter varje gång loopen körs vilket resulterar i korten flyttar på sig och placeras fint ovanpå varann i den ordning som jag vill. 
