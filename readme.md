@@ -73,3 +73,11 @@ Jag fick därefter att nytt problem med att det första två korten skrivs ut fl
 
 24-04-20 (Hemma)
 Idag ville jag lösa problemet med for loopen och det gjorde jag genom att för varje kort i loopen så får variabeln card_image ett värde som senare används för att kalla efter bilden. Jag har även en x och y variabel för postionen för varje kort, dessa ändrar värde efter varje gång loopen körs vilket resulterar i korten flyttar på sig och placeras fint ovanpå varann i den ordning som jag vill. 
+
+24-04-24 (Skola (Inte lektion))
+Idag hade vi presentationer och blev lite uttråkad, så istället för att kolla på mobilen så började jag programmera.
+p_value fixad.
+"Stand" nästan helt färdig. 
+d_value fixad.
+Orkar inte skriva dokumentationen nu (ligger i sängen och ska sova).
+

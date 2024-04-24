@@ -23,6 +23,9 @@ def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     SCREEN.blit(img, (x, y))
 
+# Function to print values
+def draw_value(value, text_col, x, y):
+    draw_text(str(value), text_font, text_col, x, y)  
 
 def draw_screen():
     SCREEN.fill(GREEN)
@@ -124,23 +127,25 @@ def value_f(x):
 
 #Add new cards into a hand
 def hit(the_hand, value):
+    global p_value, d_value
     h_card = deck.pop()
     the_hand.append(h_card)
     print(the_hand)
-    value = value + value_f(the_hand[-1][1])
-    print(value)
+    if value == p_value:
+        p_value = value + value_f(the_hand[-1][1])
+    else: 
+        d_value = value + value_f(the_hand[-1][1])
     return value
 
 mouse_down = False
-card_x = 0
 p_value = 0
 d_value = 0 
 hand = []
-d_hand = deal(2)
+d_hand = []
 
 #Function to create buttons 
 def create_button(screen, color, x, y, width, height, text, text_color):
-    global mouse_down, card_x, p_value, hand
+    global mouse_down, p_value, hand, d_hand, d_value
     pygame.draw.rect(screen, color, (x, y, width, height))
 
     font = pygame.font.Font(None, 36)
@@ -158,7 +163,12 @@ def create_button(screen, color, x, y, width, height, text, text_color):
         if click[0] == 1 and text == "Hit" and not mouse_down:
             hit(hand, p_value)
             mouse_down = True
-            pygame.display.update()
+        
+        if click[0] == 1 and text == "Stand" and not mouse_down:
+            d_value = value_f(d_hand[0][1]) + value_f(d_hand[1][1]) 
+            while d_value < 17:
+                hit(d_hand, d_value)
+                mouse_down = True 
 
         if click[0] == 0:
             mouse_down = False
@@ -168,17 +178,20 @@ def create_button(screen, color, x, y, width, height, text, text_color):
 def main():
     clock = pygame.time.Clock()
     run =True
-    global hand 
-    if not hand: # Deal the cards 
+    global hand, d_hand, p_value, d_value
+    if not hand and not d_hand: # Deal the cards 
         hand = deal(2)
+        d_hand = deal(2)
+        p_value = (value_f(hand[0][1])) + (value_f(hand[1][1]))
+        d_value = (value_f(d_hand[0][1]))
+
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():    
             if event.type == pygame.QUIT:
                 run = False
 
-        p_value = (value_f(hand[0][1])) + (value_f(hand[1][1]))
-        d_value = (value_f(d_hand[0][1]))
+  
 
         # Blit all cards using a for loop
         player_card_x = 330
@@ -189,12 +202,20 @@ def main():
             player_card_x += 20
             player_card_y -= 5
         
-
         SCREEN.blit(card_images[d_hand[0][2]],(270, 70)) 
         SCREEN.blit(DECK_IMAGE,(380, 70)) 
+        d_card_x = 270
+        d_card_y = 70
+        if len(d_hand) > 2:
+            for card in d_hand:
+                card_image = card_images[card[2]]
+                SCREEN.blit(card_image, (d_card_x, d_card_y))
+                d_card_x += 60
 
-        draw_text(str(p_value), text_font, (255, 255, 255), 490, 475)  
-        draw_text(str(d_value), text_font, (255, 255, 255), 490, 190)  
+        pygame.draw.rect(SCREEN, GREEN, (490, 475, 30, 30)) # Draw a rectangle to hide old values
+        pygame.draw.rect(SCREEN, GREEN, (490, 190, 30, 30))
+        draw_value(p_value, (255, 255,255), 490, 475)
+        draw_value(d_value, (255, 255, 255), 490, 190)  
 
         create_button(SCREEN, WHITE, 600, 200, 100, 50, "Hit", BLACK)
         create_button(SCREEN, WHITE, 600, 300, 100, 50, "Stand", BLACK)
