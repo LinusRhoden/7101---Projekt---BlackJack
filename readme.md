@@ -81,3 +81,7 @@ p_value fixad.
 d_value fixad.
 Orkar inte skriva dokumentationen nu (ligger i sängen och ska sova).
 
+24-04-25
+Win()
+busy()
+value bug fix

@@ -11,6 +11,12 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 WHITE_HOVER = (250, 249, 246)
 
+mouse_down = False
+p_value = 0
+d_value = 0 
+hand = []
+d_hand = []
+
 #Set default values
 WIDTH,HEIGHT = 800,600
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -29,8 +35,6 @@ def draw_value(value, text_col, x, y):
 
 def draw_screen():
     SCREEN.fill(GREEN)
-    draw_text("", text_font, (255, 255, 255), 270, 30)    
-    draw_text("", text_font, (255, 255, 255), 600, 270)  
     pygame.display.update()
 
 FPS = 60
@@ -131,17 +135,32 @@ def hit(the_hand, value):
     h_card = deck.pop()
     the_hand.append(h_card)
     print(the_hand)
-    if value == p_value:
+    if the_hand == hand:
         p_value = value + value_f(the_hand[-1][1])
-    else: 
+    elif the_hand == d_hand: 
         d_value = value + value_f(the_hand[-1][1])
     return value
 
-mouse_down = False
-p_value = 0
-d_value = 0 
-hand = []
-d_hand = []
+def bust(value):
+    global p_value, d_value
+    if value > 21:
+        if value == p_value:
+            draw_text("Player Bust!", text_font, (255, 255, 255), 600, 270)  
+        elif value == d_value:
+            draw_text("Dealer Bust!", text_font, (255, 255, 255), 600, 270)  
+
+def win():
+    global p_value, d_value 
+    if p_value == 21 and d_value != 21:
+        draw_text("Player BJ!", text_font, (255, 255, 255), 375, 275) 
+    elif p_value > d_value and p_value < 22 or d_value > 21:
+         draw_text("Player Won!", text_font, (255, 255, 255), 375, 275)   
+    elif p_value < d_value and d_value < 22 or p_value > 21:
+        draw_text("Dealer Won!", text_font, (255, 255, 255), 375, 275) 
+    elif p_value == d_value and p_value < 22:
+        draw_text("Its a Push!", text_font, (255, 255, 255), 375, 275)  
+     
+
 
 #Function to create buttons 
 def create_button(screen, color, x, y, width, height, text, text_color):
@@ -162,18 +181,19 @@ def create_button(screen, color, x, y, width, height, text, text_color):
 
         if click[0] == 1 and text == "Hit" and not mouse_down:
             hit(hand, p_value)
+            bust(p_value)
             mouse_down = True
         
         if click[0] == 1 and text == "Stand" and not mouse_down:
             d_value = value_f(d_hand[0][1]) + value_f(d_hand[1][1]) 
             while d_value < 17:
                 hit(d_hand, d_value)
-                mouse_down = True 
+                bust(d_value)
+            mouse_down = True 
+            win()
 
         if click[0] == 0:
             mouse_down = False
-
-
 
 def main():
     clock = pygame.time.Clock()
@@ -190,8 +210,6 @@ def main():
         for event in pygame.event.get():    
             if event.type == pygame.QUIT:
                 run = False
-
-  
 
         # Blit all cards using a for loop
         player_card_x = 330
