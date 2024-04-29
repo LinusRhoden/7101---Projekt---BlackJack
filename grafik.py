@@ -161,10 +161,11 @@ def win():
         draw_text("Its a Push!", text_font, (255, 255, 255), 375, 275)  
      
 
+d_stand = False
 
 #Function to create buttons 
 def create_button(screen, color, x, y, width, height, text, text_color):
-    global mouse_down, p_value, hand, d_hand, d_value
+    global mouse_down, p_value, hand, d_hand, d_value, d_stand
     pygame.draw.rect(screen, color, (x, y, width, height))
 
     font = pygame.font.Font(None, 36)
@@ -189,6 +190,8 @@ def create_button(screen, color, x, y, width, height, text, text_color):
             while d_value < 17:
                 hit(d_hand, d_value)
                 bust(d_value)
+            if d_value > 16:
+                d_stand = True
             mouse_down = True 
             win()
 
@@ -198,7 +201,7 @@ def create_button(screen, color, x, y, width, height, text, text_color):
 def main():
     clock = pygame.time.Clock()
     run =True
-    global hand, d_hand, p_value, d_value
+    global hand, d_hand, p_value, d_value, d_stand
     if not hand and not d_hand: # Deal the cards 
         hand = deal(2)
         d_hand = deal(2)
@@ -220,11 +223,11 @@ def main():
             player_card_x += 20
             player_card_y -= 5
         
-        SCREEN.blit(card_images[d_hand[0][2]],(270, 70)) 
-        SCREEN.blit(DECK_IMAGE,(380, 70)) 
+        SCREEN.blit(card_images[d_hand[0][2]],(290, 70)) 
+        SCREEN.blit(DECK_IMAGE,(350, 70)) 
         d_card_x = 270
         d_card_y = 70
-        if len(d_hand) > 2:
+        if len(d_hand) > 2 or d_stand:
             for card in d_hand:
                 card_image = card_images[card[2]]
                 SCREEN.blit(card_image, (d_card_x, d_card_y))

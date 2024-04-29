@@ -83,5 +83,10 @@ Orkar inte skriva dokumentationen nu (ligger i sängen och ska sova).
 
 24-04-25
 Win()
-busy()
+bust()
 value bug fix
+
+24-05-29
+d_stand > 16
+
+(Skriver mer dokumentation om nån dag)
