@@ -16,6 +16,11 @@ p_value = 0
 d_value = 0 
 hand = []
 d_hand = []
+FPS = 60
+d_stand = False
+bank = 1000
+bet = 0
+
 
 #Set default values
 WIDTH,HEIGHT = 800,600
@@ -37,11 +42,9 @@ def draw_screen():
     SCREEN.fill(GREEN)
     pygame.display.update()
 
-FPS = 60
-
+#Load every card in a dict
 DECK_IMAGE = pygame.image.load('resources/cards/cardback.png')
 card_images = {}
-#Load every card in a dict
 card_images["spadeK"] = pygame.image.load('resources/cards/ks.png')
 card_images["heartK"] = pygame.image.load('resources/cards/kh.png')
 card_images["clubK"] = pygame.image.load('resources/cards/kc.png')
@@ -149,20 +152,31 @@ def bust(value):
         elif value == d_value:
             draw_text("Dealer Bust!", text_font, (255, 255, 255), 600, 270)  
 
+# Add a function to handle betting
+def place_bet():
+    global bank, bet
+    # Implement your betting interface here
+    # You can use input(), buttons, sliders, etc. to get the bet amount from the player
+    bet = int(input("Enter your bet amount: "))
+    while bet > bank:
+        print("You don't have enough money. Your bank: ", bank)
+        bet = int(input("Enter a valid bet amount: "))
+    bank -= bet
+
 def win():
-    global p_value, d_value 
+    global p_value, d_value, bet, bank
     if p_value == 21 and d_value != 21:
-        draw_text("Player BJ!", text_font, (255, 255, 255), 375, 275) 
+        bank += bet * 1.5
+        draw_text("Player BJ!", text_font, (255, 255, 255), 350, 275) 
     elif p_value > d_value and p_value < 22 or d_value > 21:
-         draw_text("Player Won!", text_font, (255, 255, 255), 375, 275)   
+         bank += bet * 2
+         draw_text("Player Won!", text_font, (255, 255, 255), 350, 275)   
     elif p_value < d_value and d_value < 22 or p_value > 21:
-        draw_text("Dealer Won!", text_font, (255, 255, 255), 375, 275) 
+        draw_text("Dealer Won!" , text_font, (255, 255, 255), 350, 275) 
     elif p_value == d_value and p_value < 22:
-        draw_text("Its a Push!", text_font, (255, 255, 255), 375, 275)  
+        bank += bet
+        draw_text("Its a Push!", text_font, (255, 255, 255), 350, 275)  
      
-
-d_stand = False
-
 #Function to create buttons 
 def create_button(screen, color, x, y, width, height, text, text_color):
     global mouse_down, p_value, hand, d_hand, d_value, d_stand
@@ -198,6 +212,8 @@ def create_button(screen, color, x, y, width, height, text, text_color):
         if click[0] == 0:
             mouse_down = False
 
+
+
 def main():
     clock = pygame.time.Clock()
     run =True
@@ -223,8 +239,8 @@ def main():
             player_card_x += 20
             player_card_y -= 5
         
-        SCREEN.blit(card_images[d_hand[0][2]],(290, 70)) 
-        SCREEN.blit(DECK_IMAGE,(350, 70)) 
+        SCREEN.blit(card_images[d_hand[0][2]],(270, 70)) 
+        SCREEN.blit(DECK_IMAGE,(330, 70)) 
         d_card_x = 270
         d_card_y = 70
         if len(d_hand) > 2 or d_stand:
@@ -233,20 +249,25 @@ def main():
                 SCREEN.blit(card_image, (d_card_x, d_card_y))
                 d_card_x += 60
 
-        pygame.draw.rect(SCREEN, GREEN, (490, 475, 30, 30)) # Draw a rectangle to hide old values
+        # Draw a rectangle to hide old values
+        pygame.draw.rect(SCREEN, GREEN, (490, 475, 30, 30)) 
         pygame.draw.rect(SCREEN, GREEN, (490, 190, 30, 30))
         draw_value(p_value, (255, 255,255), 490, 475)
         draw_value(d_value, (255, 255, 255), 490, 190)  
 
+        pygame.draw.rect(SCREEN, GREEN, (50, 550, 50, 50))
+        draw_value(bank, (255, 255, 255), 50, 550)
+
         create_button(SCREEN, WHITE, 600, 200, 100, 50, "Hit", BLACK)
-        create_button(SCREEN, WHITE, 600, 300, 100, 50, "Stand", BLACK)
-       
+        create_button(SCREEN, WHITE, 600, 300, 100, 50, "Stand", BLACK)    
 
         pygame.display.update() 
       
 
     pygame.QUIT()
     sys.exit()
+
+#place_bet()
 
 draw_screen()
 

@@ -86,7 +86,12 @@ Win()
 bust()
 value bug fix
 
-24-05-29
+24-04-29
 d_stand > 16
 
+24-05-06 (Sjuk)
+bet och bank (funkar sådär, ska fixa visuell input)
+
+
 (Skriver mer dokumentation om nån dag)
+
